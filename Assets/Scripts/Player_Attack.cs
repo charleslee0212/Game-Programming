@@ -10,26 +10,28 @@ public class Player_Attack : MonoBehaviour
     public Transform attackPos;
     public LayerMask whatIsEnemies;
     public float attackRange;
-    public int damage;
+    Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        anim.SetTrigger("stopAttack");
         if (timeBtwAttack <= 0)
         {
             if (Input.GetKey(KeyCode.Q))
             {
+                anim.SetTrigger("attack");
                 Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
 
                 for (int i = 0; i < enemiesToDamage.Length; i++)
                 {
-                    //enemiesToDamage[i].GetComponent<Enemy>().health -= damage;
+                    enemiesToDamage[i].GetComponent<BossHealth>().health -= 1;
                 }
             }
             timeBtwAttack = startTimeBtwAttack;

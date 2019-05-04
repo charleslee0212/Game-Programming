@@ -10,9 +10,9 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
 
     const float groundedRadius = .2f;
-    public float speed = 1.5f;
+    public float speed = 10f;
     public float jumpForce = 10f;
-    float velX;
+    public float velX;
     float velY;
     bool facingRight = true;
     Rigidbody2D rigBody;
@@ -20,13 +20,14 @@ public class Player_Movement : MonoBehaviour
     private bool grounded;
     public UnityEvent OnLandEvent;
     public Animator animator;
+    public Vector2 playerVelocity;
 
     // Start is called before the first frame update
     void Awake()
     {
         rigBody = GetComponent<Rigidbody2D>();
 
-        if(OnLandEvent == null)
+        if (OnLandEvent == null)
         {
             OnLandEvent = new UnityEvent();
         }
@@ -41,31 +42,41 @@ public class Player_Movement : MonoBehaviour
         animator.SetFloat("speed", Mathf.Abs(velX));
 
         //use left and right arrow keys to move
-        rigBody.velocity = new Vector2(velX * speed, velY);
-
+        rigBody.AddForce(new Vector2(velX * speed, 0));
+        //rigBody.velocity = new Vector2(velX * speed, velY);
+        playerVelocity = rigBody.velocity;
         //use space to jump
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             rigBody.velocity = Vector2.up * jumpForce;
             animator.SetBool("isJumping", true);
         }
-    }
 
-    public void onLanding()
-    {
-        animator.SetBool("isJumping", false);
-    }
+        //flip player 
+        Vector3 localScale = transform.localScale;
+        if (velX > 0)
+        {
+            facingRight = true;
+        }
+        else if (velX < 0)
+        {
+            facingRight = false;
+        }
+        if (((facingRight) && (localScale.x < 0)) || ((!facingRight) && (localScale.x > 0)))
+        {
+            localScale.x *= -1;
+        }
 
-    void FixedUpdate()
-    {
+        transform.localScale = localScale;
+
         bool wasGrounded = grounded;
         grounded = false;
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundedRadius, whatIsGround);
 
-        for(int i = 0; i < colliders.Length; i++)
+        for (int i = 0; i < colliders.Length; i++)
         {
-            if(colliders[i].gameObject != gameObject)
+            if (colliders[i].gameObject != gameObject)
             {
                 grounded = true;
                 if (!wasGrounded)
@@ -74,25 +85,11 @@ public class Player_Movement : MonoBehaviour
                 }
             }
         }
+
     }
 
-    void LateUpdate()
+    public void onLanding()
     {
-        //flip player 
-        Vector3 localScale = transform.localScale;
-        if(velX > 0)
-        {
-            facingRight = true;
-        }
-        else if(velX < 0)
-        {
-            facingRight = false;
-        }
-        if(((facingRight) && (localScale.x < 0)) || ((!facingRight) && (localScale.x > 0)))
-        {
-            localScale.x *= -1;
-        }
-
-        transform.localScale = localScale;
+        animator.SetBool("isJumping", false);
     }
 }
