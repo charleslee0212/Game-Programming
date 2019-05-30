@@ -11,6 +11,16 @@ public class BossHealth : MonoBehaviour
     public Image[] hearts;
     public Sprite fullhearts;
     public Sprite emptyhearts;
+    public Rigidbody2D rigBody;
+    public CircleCollider2D circleCollider2D;
+    Animator anim;
+
+    void Start()
+    {
+        circleCollider2D = GetComponent<CircleCollider2D>();
+        rigBody = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+    }
 
     void Update()
     {
@@ -40,7 +50,10 @@ public class BossHealth : MonoBehaviour
 
         if(health <= 0)
         {
-            Destroy(gameObject);
+            Destroy(rigBody);
+            Destroy(circleCollider2D);
+            anim.SetBool("isDead", true);
+            GetComponent<Boss>().enabled = false;
         }
     }
 }

@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -52,4 +53,7 @@ TagManager:
     locked: 0
   - name: Forground
     uniqueID: 3931671295
+    locked: 0
+  - name: test
+    uniqueID: 2494906891
     locked: 0

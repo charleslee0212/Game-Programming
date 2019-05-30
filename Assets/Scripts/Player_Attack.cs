@@ -5,11 +5,14 @@ using UnityEngine;
 public class Player_Attack : MonoBehaviour
 {
     private float timeBtwAttack;
-    public float startTimeBtwAttack;
 
     public Transform attackPos;
     public LayerMask whatIsEnemies;
     public float attackRange;
+    public bool canAttack = true;
+    private float timer = 0.0f;
+    public float waitingTime = 0.1f;
+    public AudioSource sound;
     Animator anim;
 
     // Start is called before the first frame update
@@ -21,12 +24,21 @@ public class Player_Attack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        timeBtwAttack += Time.deltaTime;
+        if(timeBtwAttack > 0.5)
+        {
+            canAttack = true;
+        }
         anim.SetTrigger("stopAttack");
-        if (timeBtwAttack <= 0)
+        if (canAttack)
         {
             if (Input.GetKey(KeyCode.Q))
             {
+                canAttack = false;
+                timeBtwAttack = 0;
                 anim.SetTrigger("attack");
+                sound.Play();
                 Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
 
                 for (int i = 0; i < enemiesToDamage.Length; i++)
@@ -34,11 +46,7 @@ public class Player_Attack : MonoBehaviour
                     enemiesToDamage[i].GetComponent<BossHealth>().health -= 1;
                 }
             }
-            timeBtwAttack = startTimeBtwAttack;
-        }
-        else
-        {
-            timeBtwAttack -= Time.deltaTime;
+
         }
     }
 

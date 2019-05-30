@@ -42,8 +42,9 @@ public class Player_Movement : MonoBehaviour
         animator.SetFloat("speed", Mathf.Abs(velX));
 
         //use left and right arrow keys to move
-        rigBody.AddForce(new Vector2(velX * speed, 0));
-        //rigBody.velocity = new Vector2(velX * speed, velY);
+        //rigBody.AddForce(new Vector2(velX * speed, 0));
+        rigBody.velocity = new Vector2(velX * speed, velY);
+
         playerVelocity = rigBody.velocity;
         //use space to jump
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
