@@ -496,7 +496,11 @@ MonoBehaviour:
   - {fileID: 1994307259}
   fullhearts: {fileID: 21300000, guid: 543d045a6b4644e5a8f76c07b2bb9ea6, type: 3}
   emptyhearts: {fileID: 21300000, guid: 6eadd0c377a3540a0a280c8f321b9a89, type: 3}
+  rigBody: {fileID: 0}
+  circleCollider2D: {fileID: 0}
+  index: 0
   otherObject: {fileID: 0}
+  myAnim: {fileID: 0}
 --- !u!114 &166922704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18027,7 +18031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754b633918cdf46d38c60aad086e7eca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 1
+  index: 2
 --- !u!1 &1446026475
 GameObject:
   m_ObjectHideFlags: 0

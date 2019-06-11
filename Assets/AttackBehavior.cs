@@ -29,6 +29,6 @@ public class AttackBehavior : StateMachineBehaviour
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        Boss.isAttacking = false;
     }
 }

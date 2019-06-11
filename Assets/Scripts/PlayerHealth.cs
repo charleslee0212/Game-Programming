@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -12,8 +13,15 @@ public class PlayerHealth : MonoBehaviour
     public Sprite fullhearts;
     public Sprite emptyhearts;
 
+    public Rigidbody2D rigBody;
+    public CircleCollider2D circleCollider2D;
+
+    float time = 0f;
+    public int index;
+
     public GameObject otherObject;
     Animator otherAnim;
+    public Animator myAnim;
 
     void Start()
     {
@@ -22,7 +30,22 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        if(health > numOfHearts)
+        if (myAnim.GetBool("hit"))
+        {
+            time += Time.deltaTime;
+
+            if (time > 0.5)
+            {
+                GetComponent<Player_Movement>().enabled = true;
+                GetComponent<Player_Attack>().enabled = true;
+                GetComponent<PlayerDash>().enabled = true;
+
+                myAnim.SetBool("hit", false);
+
+                time = 0;
+            }
+        }
+        if (health > numOfHearts)
         {
             health = numOfHearts;
         }
@@ -47,11 +70,23 @@ public class PlayerHealth : MonoBehaviour
 
             if (health <= 0)
             {
+                time += Time.deltaTime;
                 otherAnim.SetTrigger("idle");
                 otherAnim.SetBool("isAttacking", false);
                 //Destroy(gameObject);
+                myAnim.SetBool("isDead", true);
 
-                Application.LoadLevel(Application.loadedLevel);
+                Destroy(rigBody);
+                Destroy(circleCollider2D);
+
+                GetComponent<Player_Movement>().enabled = false;
+                GetComponent<Player_Attack>().enabled = false;
+                GetComponent<PlayerDash>().enabled = false;
+
+                if(time > 3)
+                {
+                    SceneManager.LoadScene(index);
+                }
             }
         }
     }
@@ -60,8 +95,16 @@ public class PlayerHealth : MonoBehaviour
     {
         if (collision.gameObject.name.Equals("attack"))
         {
+            if(health > 1)
+            {
+                myAnim.SetBool("hit", true);
+
+                GetComponent<Player_Movement>().enabled = false;
+                GetComponent<Player_Attack>().enabled = false;
+                GetComponent<PlayerDash>().enabled = false;
+            }
+
             health -= 1;
         }
     }
-
 }

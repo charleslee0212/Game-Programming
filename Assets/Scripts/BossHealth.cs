@@ -13,6 +13,7 @@ public class BossHealth : MonoBehaviour
     public Sprite emptyhearts;
     public Rigidbody2D rigBody;
     public CircleCollider2D circleCollider2D;
+    public bool dead = false;
     Animator anim;
 
     void Start()
@@ -50,6 +51,7 @@ public class BossHealth : MonoBehaviour
 
         if(health <= 0)
         {
+            dead = true;
             Destroy(rigBody);
             Destroy(circleCollider2D);
             anim.SetBool("isDead", true);
